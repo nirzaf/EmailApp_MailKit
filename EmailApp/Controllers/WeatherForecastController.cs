@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using EmailService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace MailApp.Controllers
 {

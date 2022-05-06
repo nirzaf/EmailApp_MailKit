@@ -1,6 +1,5 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,13 +13,6 @@ namespace EmailService
         public EmailSender(EmailConfiguration emailConfig)
         {
             _emailConfig = emailConfig;
-        }
-
-        public void SendEmail(Message message)
-        {
-            var emailMessage = CreateEmailMessage(message);
-
-            Send(emailMessage);
         }
 
         public async Task SendEmailAsync(Message message)
@@ -56,31 +48,6 @@ namespace EmailService
 
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
-        }
-
-        private void Send(MimeMessage mailMessage)
-        {
-            using (var client = new SmtpClient())
-            {
-                try
-                {
-                    client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
-
-                    client.Send(mailMessage);
-                }
-                catch
-                {
-                    //log an error message or throw an exception, or both.
-                    throw;
-                }
-                finally
-                {
-                    client.Disconnect(true);
-                    client.Dispose();
-                }
-            }
         }
 
         private async Task SendAsync(MimeMessage mailMessage)
